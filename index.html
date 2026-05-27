@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Ryan Fredette, MD — clinical tools and apps for medical training, including Proceduralist, POCUS, and an interactive acid-base analyzer." />
+  <meta name="theme-color" content="#9ebf8a" />
+  <title>Ryan Fredette, MD — Clinical Tools</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --sage: rgb(158, 191, 138);
+      --sage-light: rgba(158, 191, 138, 0.15);
+      --sage-dark: rgb(120, 155, 100);
+      --bg: #f3f5f3;
+      --bg-card: #ffffff;
+      --bg-pill: #eef1ee;
+      --text: #1a1a2e;
+      --text-secondary: #5d6470;
+      --text-muted: #8b929c;
+      --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 16px 32px rgba(120, 155, 100, 0.18);
+      --radius: 18px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0f1115;
+        --bg-card: #181c22;
+        --bg-pill: #232830;
+        --text: #f3f4f6;
+        --text-secondary: #b3b9c4;
+        --text-muted: #7a818c;
+        --border: rgba(255, 255, 255, 0.08);
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.5);
+        --shadow-hover: 0 16px 32px rgba(158, 191, 138, 0.18);
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { background: var(--bg); color: var(--text); }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============ Top nav ============ */
+    .nav-bar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(243, 245, 243, 0.85);
+      -webkit-backdrop-filter: saturate(160%) blur(10px);
+      backdrop-filter: saturate(160%) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .nav-bar { background: rgba(15,17,21,0.85); }
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto;
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+    .nav-brand-logo {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--sage), var(--sage-dark));
+      color: white;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 15px;
+    }
+    .nav-links { margin-left: auto; display: flex; gap: 4px; }
+    .nav-links a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: background .15s, color .15s;
+    }
+    .nav-links a:hover { background: var(--sage-light); color: var(--sage-dark); }
+    @media (max-width: 560px) {
+      .nav-links a { padding: 6px 10px; font-size: 13px; }
+    }
+
+    /* ============ Hero ============ */
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 64px 24px 32px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 800px) {
+      .hero { grid-template-columns: 1.4fr 1fr; align-items: center; padding: 88px 24px 56px; }
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      background: var(--sage-light);
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5.5vw, 52px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 .accent { color: var(--sage-dark); }
+    .hero p.lede {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin-bottom: 24px;
+    }
+    .hero-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary, .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all .15s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--sage); color: white;
+      box-shadow: 0 6px 14px rgba(120, 155, 100, 0.3);
+    }
+    .btn-primary:hover { background: var(--sage-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--bg-pill); }
+
+    .hero-visual {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+    }
+    .hero-shape {
+      width: 280px; height: 280px;
+      border-radius: 32% 68% 38% 62% / 48% 38% 62% 52%;
+      background: linear-gradient(135deg, var(--sage), var(--sage-dark));
+      opacity: 0.18;
+      position: absolute;
+      animation: blob 12s ease-in-out infinite alternate;
+    }
+    .hero-shape.b {
+      width: 220px; height: 220px;
+      transform: translate(60px, -30px);
+      animation-duration: 16s;
+      animation-direction: alternate-reverse;
+    }
+    @keyframes blob {
+      from { border-radius: 32% 68% 38% 62% / 48% 38% 62% 52%; }
+      to   { border-radius: 60% 40% 70% 30% / 30% 60% 40% 70%; }
+    }
+    .hero-emblem {
+      position: relative;
+      width: 140px; height: 140px;
+      border-radius: 36px;
+      background: var(--bg-card);
+      box-shadow: var(--shadow-lg);
+      display: grid; place-items: center;
+      font-size: 64px;
+      color: var(--sage-dark);
+    }
+
+    /* ============ Section ============ */
+    section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      margin-bottom: 8px;
+    }
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin-bottom: 32px;
+    }
+
+    /* ============ Project cards ============ */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media (min-width: 720px) {
+      .project-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      box-shadow: var(--shadow);
+      display: flex; flex-direction: column;
+      gap: 14px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--sage-light), transparent 40%);
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--sage);
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--sage-light);
+      color: var(--sage-dark);
+      display: grid; place-items: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .project-card h3 {
+      font-size: 19px; font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .project-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      flex: 1;
+      line-height: 1.55;
+    }
+    .project-meta {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 4px;
+    }
+    .meta-pill {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-pill);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .project-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 600;
+      color: var(--sage-dark);
+      margin-top: 4px;
+    }
+    .project-card .arrow { transition: transform .2s; }
+    .project-card:hover .arrow { transform: translateX(4px); }
+    .project-card.disabled .project-cta { color: var(--text-muted); }
+    .project-card.disabled:hover { transform: none; }
+
+    /* ============ About ============ */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 780px) {
+      .about { grid-template-columns: 1fr 1fr; align-items: start; }
+    }
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .about-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .about-card h3 .ico {
+      width: 28px; height: 28px;
+      border-radius: 9px;
+      background: var(--sage-light);
+      color: var(--sage-dark);
+      display: grid; place-items: center;
+      font-size: 14px;
+    }
+    .about-card p, .about-card li {
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .about-card p + p { margin-top: 10px; }
+    .about-card ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .about-card li { display: flex; align-items: flex-start; gap: 10px; color: var(--text-secondary); }
+    .about-card li::before {
+      content: ""; width: 6px; height: 6px;
+      background: var(--sage); border-radius: 50%;
+      margin-top: 9px; flex-shrink: 0;
+    }
+
+    /* ============ Footer ============ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    footer .footer-inner { max-width: 1080px; margin: 0 auto; }
+    footer p + p { margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="nav-brand-logo">RF</div>
+        <span>Ryan Fredette, MD</span>
+      </div>
+      <div class="nav-links">
+        <a href="proceduralist/index.html">Proceduralist</a>
+        <a href="pocus/index.html">POCUS</a>
+        <a href="abg/index.html">ABG Analyzer</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <span class="hero-tag">Clinical training tools</span>
+      <h1>Bedside-ready references<br/>built by a <span class="accent">physician</span>.</h1>
+      <p class="lede">
+        A small collection of focused apps for medical trainees and clinicians — covering step-by-step procedure guides, point-of-care ultrasound, and acid-base interpretation. Free to use, designed for the bedside, and continually refined from real clinical practice.
+      </p>
+      <div class="hero-cta">
+        <a class="btn-primary" href="proceduralist/index.html">Open Proceduralist →</a>
+        <a class="btn-secondary" href="#projects">See all projects</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-shape"></div>
+      <div class="hero-shape b"></div>
+      <div class="hero-emblem">⚕</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <span class="section-eyebrow">Projects</span>
+    <h2 class="section-title">Three tools, one workflow.</h2>
+    <p class="section-subtitle">
+      Each app is independent and runs in your browser — no install required. Click any card to launch.
+    </p>
+
+    <div class="project-grid">
+      <a class="project-card" href="proceduralist/index.html">
+        <div class="project-icon">📋</div>
+        <h3>Proceduralist</h3>
+        <p>Step-by-step procedure guides for the most common bedside procedures — arterial line, central line, lumbar puncture, paracentesis, NG tube placement and more — with indications, contraindications, complications, supplies, and a personal procedure log.</p>
+        <div class="project-meta">
+          <span class="meta-pill">9 procedures</span>
+          <span class="meta-pill">Photo + video</span>
+          <span class="meta-pill">Portfolio tracking</span>
+        </div>
+        <span class="project-cta">Open the app <span class="arrow">→</span></span>
+      </a>
+
+      <a class="project-card" href="pocus/index.html">
+        <div class="project-icon">🩺</div>
+        <h3>POCUS</h3>
+        <p>Point-of-care ultrasound reference covering core views, identification of pathology, and procedural ultrasound guidance — built for residents learning bedside ultrasonography.</p>
+        <div class="project-meta">
+          <span class="meta-pill">Coming soon</span>
+        </div>
+        <span class="project-cta">Preview <span class="arrow">→</span></span>
+      </a>
+
+      <a class="project-card" href="abg/index.html">
+        <div class="project-icon">⚗️</div>
+        <h3>ABG Analyzer</h3>
+        <p>Interactive arterial blood gas tool — enter pH, PaCO₂, HCO₃⁻ and a few labs, and the analyzer identifies the primary disturbance, checks compensation (Winter's, acute/chronic), computes anion gap, ΔΔ, osmolal gap, and surfaces likely etiologies.</p>
+        <div class="project-meta">
+          <span class="meta-pill">Real-time</span>
+          <span class="meta-pill">Etiology hints</span>
+          <span class="meta-pill">Mobile-friendly</span>
+        </div>
+        <span class="project-cta">Open the analyzer <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">About</span>
+    <h2 class="section-title">Why these apps exist.</h2>
+    <p class="section-subtitle">
+      Most procedural and acid-base references are either locked inside textbooks or scattered across PDFs and slide decks. These tools bring the most useful parts into a single, lightweight place that works on any phone or tablet at the bedside.
+    </p>
+
+    <div class="about">
+      <div class="about-card">
+        <h3><span class="ico">⚕</span> Designed for trainees</h3>
+        <p>
+          Each app started as a personal reference during residency and was rebuilt for the people coming up behind me. The content is curated, not exhaustive — every section is something I've reached for at 3 a.m. in the ICU.
+        </p>
+        <p>
+          If something is wrong, missing, or could be clearer, I want to know about it.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h3><span class="ico">★</span> What you'll find inside</h3>
+        <ul>
+          <li>Photo- and video-illustrated procedure walkthroughs in Proceduralist</li>
+          <li>An evidence-aware acid-base interpreter that handles mixed disorders, not just textbook patterns</li>
+          <li>A growing POCUS module (in development)</li>
+          <li>No accounts, no ads, no tracking — everything runs locally in your browser</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <p><strong>Ryan Fredette, MD</strong></p>
+      <p>Educational reference only — not a substitute for clinical judgement.</p>
+    </div>
+  </footer>
+</body>
+</html>

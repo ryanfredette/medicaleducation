@@ -1,0 +1,639 @@
+/* ============================================================
+   index.css – Global design system, colors, variables, & layouts
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --sage: rgb(158, 191, 138);
+  --sage-light: rgba(158, 191, 138, 0.15);
+  --sage-dark: rgb(120, 155, 100);
+
+  --red: rgb(220, 80, 80);
+  --blue: rgb(80, 130, 220);
+  --purple: rgb(150, 80, 200);
+  --green: rgb(80, 180, 120);
+  --orange: rgb(240, 160, 60);
+  --yellow: rgb(240, 200, 60);
+
+  /* Interface Grays — Light defaults */
+  --bg: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --bar-bg: #ffffff;                       /* header & bottom tab bar */
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border: rgba(0, 0, 0, 0.08);
+  --scrollbar-thumb: rgba(0, 0, 0, 0.15);
+
+  /* Layout & Elevations */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ─── Dark Mode ───────────────────────────────────────────────
+   Two triggers:
+   (a) <html data-theme="dark">  — explicit user choice from Preferences
+   (b) prefers-color-scheme: dark — system default, UNLESS the user has
+       explicitly forced light via data-theme="light"
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1115;
+    --bg-card: rgba(22, 26, 32, 0.8);
+    --bg-elevated: #1e222b;
+    --bar-bg: #0f1115;
+    --text: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --border: rgba(255, 255, 255, 0.08);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Explicit dark — wins over a light system preference. */
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --bg-card: rgba(22, 26, 32, 0.8);
+  --bg-elevated: #1e222b;
+  --bar-bg: #0f1115;
+  --text: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border: rgba(255, 255, 255, 0.08);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background-color: var(--bg);
+}
+
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-top: 72px; /* For fixed header */
+  padding-bottom: calc(88px + var(--safe-area-bottom)); /* For bottom bar */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Hide the body's vertical scrollbar (scrolling still works).
+     This matches the native-mobile look used elsewhere in the app
+     (e.g. the horizontal tabs row). Inner scrollers like .modal-body
+     and media carousels keep their own styled scrollbar via the
+     ::-webkit-scrollbar rule below. */
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;        /* old Edge / IE */
+}
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;                  /* WebKit / Blink (Android WebView) */
+}
+
+/* Scrollbar styling — applies only to inner scrollable elements,
+   not the page itself (html/body are hidden above). */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 99px;
+}
+
+/* ========== HEADER BAR ========== */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bar-bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+}
+
+.header-inner {
+  max-width: 800px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-logo-icon {
+  color: var(--sage-dark);
+  display: flex;
+  align-items: center;
+}
+
+.header-app-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.header-menu-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+.header-menu-btn:hover {
+  background: var(--border);
+}
+.header-menu-btn:active {
+  background: var(--border);
+  transform: scale(0.95);
+}
+
+/* Settings Dropdown */
+.settings-dropdown {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  animation: slideUp 0.2s ease-out;
+  z-index: 1001;
+}
+
+.settings-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 550;
+  color: var(--text);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.settings-dropdown-item:hover {
+  background: var(--sage-light);
+  color: var(--sage-dark);
+}
+
+/* ========== MAIN CONTAINER ========== */
+.content-area {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.page-container {
+  width: 100%;
+}
+
+/* ========== BOTTOM TAB BAR ========== */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bar-bg);
+  height: calc(64px + var(--safe-area-bottom));
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: var(--safe-area-bottom);
+  z-index: 1000;
+}
+
+.tab-item {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tab-item i {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.2s ease;
+}
+
+.tab-item:active i {
+  transform: scale(0.9);
+}
+
+.tab-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tab-item.active {
+  color: var(--sage-dark);
+}
+
+/* ========== CARDS & GRIDS ========== */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+@media (min-width: 540px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(158, 191, 138, 0.4);
+}
+
+/* ========== INTERACTIVE CONTROLS ========== */
+
+/* Toggle Switches
+   Pattern: wrapper span + transparent input overlay + sibling slider span.
+   Avoids ::before on the <input>, which Android WebView refuses to render
+   reliably on replaced elements like checkboxes. */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.toggle-checkbox {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+  pointer-events: none;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+  transition: transform 0.2s ease;
+}
+.toggle-checkbox:checked + .toggle-slider {
+  background: var(--sage);
+}
+.toggle-checkbox:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Checklist Items */
+.checklist-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.checklist-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.checklist-checkbox:checked {
+  border-color: var(--sage-dark);
+  background-color: var(--sage-dark);
+}
+
+.checklist-checkbox::after {
+  content: '\2713';
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: none;
+}
+
+.checklist-checkbox:checked::after {
+  display: block;
+}
+
+.checklist-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: var(--transition);
+}
+
+.checklist-checkbox:checked + .checklist-text {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+/* Chips Filter */
+.chip {
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.chip.active {
+  background: var(--sage-dark);
+  color: white;
+  border-color: var(--sage-dark);
+}
+
+.chip:hover:not(.active) {
+  background: var(--sage-light);
+  color: var(--sage-dark);
+}
+
+/* Search Input */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  gap: 10px;
+  transition: var(--transition);
+}
+.search-bar:focus-within {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px var(--sage-light);
+}
+.search-bar input {
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  width: 100%;
+}
+.search-bar input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--sage-dark);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-primary:hover {
+  background: rgb(105, 140, 85);
+  box-shadow: 0 4px 12px rgba(120, 155, 100, 0.25);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary:hover {
+  background: var(--sage-light);
+  color: var(--sage-dark);
+  border-color: rgba(158, 191, 138, 0.4);
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.btn-icon:hover {
+  color: var(--text);
+}
+
+.btn-danger {
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-danger:hover {
+  background: rgb(200, 60, 60);
+  box-shadow: 0 4px 12px rgba(220, 80, 80, 0.25);
+}
+
+/* ========== MODALS OVERLAY ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Per-modal taller variant — opt-in by adding `modal-tall` to #modal-container.
+   .modal-body has overflow-y:auto, so a min-height on an inner content div
+   doesn't bubble up — it has to live on the container itself.
+   Uses pixel units instead of vh: some Android WebView versions briefly
+   compute vh to 0 while the scaleIn animation is running, which collapses
+   the modal to a thin sliver. */
+.modal.modal-tall {
+  min-height: 600px;
+}
+
+/* ========== UTILITIES & ANIMATIONS ========== */
+.fade-in {
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.95; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.counter-value.met {
+  color: var(--sage-dark) !important;
+  text-shadow: 0 0 1px rgba(120, 155, 100, 0.1);
+}
